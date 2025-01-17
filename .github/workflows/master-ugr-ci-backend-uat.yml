@@ -156,3 +156,13 @@ jobs:
 
       - name: run tests
         run: dotnet test ${{ env.TEST_PATH }}
+  dependabot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Dependabot update check
+        run: |
+          git fetch --all
+          git pull origin main
+          curl -s https://raw.githubusercontent.com/dependabot/dependabot-core/master/cli/cli.rb | ruby
