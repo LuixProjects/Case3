@@ -97,10 +97,8 @@ jobs:
 
     - name: Configure JFrog CLI
       run: |
-        jfrog config add my-server \
-          --url=${{ secrets.JFROG_URL }} \
-          --apikey=${{ secrets.JFROG_API_KEY }} \
-          --interactive=false
+        jfrog config add my-server --url=${{ secrets.JFROG_URL }} --apikey=${{ secrets.JFROG_API_KEY }} --interactive=false
+
 
     # Nuevo: Subir artefactos a JFrog
     - name: Upload artifacts to JFrog
