@@ -53,6 +53,19 @@ jobs:
       run: |
         mkdir -p ./.sonar/scanner
         dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+    - name: Configurar entorno para PowerShell
+      run: |
+        # Importar la clave pública del repositorio de Microsoft
+        wget -q https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+        sudo dpkg -i packages-microsoft-prod.deb
+        rm packages-microsoft-prod.deb
+
+        # Actualizar los paquetes e instalar PowerShell
+        sudo apt-get update
+        sudo apt-get install -y powershell
+
+    - name: Verificar instalación de PowerShell
+      run: pwsh --version
     - name: Build and analyze
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
