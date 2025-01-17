@@ -89,17 +89,9 @@ jobs:
           JF_GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           JF_WORKING_DIR: "${{ env.WORKING_DIRECTORY }}"
 
-      - name: List directory structure
-        run: ls -R "${{ env.WORKING_DIRECTORY }}"
-
-      - name: Upload Xray SCA report to JFrog Xray
+      - name: Run SCA analysis with JFrog Xray
         run: |
-            curl -u "${{ secrets.JF_ACCESS_TOKEN }}" -X POST \
-              -F "file=@${{ env.WORKING_DIRECTORY }}/xray-report.json" \
-              "${{ secrets.JF_URL }}/xray/v1/report/upload"
-        env:
-          JF_URL: ${{ secrets.JF_URL }}
-          JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+          jfrog xr scan .
 
   test:
     runs-on: ubuntu-latest
