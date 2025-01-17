@@ -6,15 +6,12 @@ on:
   pull_request:
     branches:
     - dev
-<<<<<<< HEAD
+
 permissions:
   id-token: write
   contents: write
   pull-requests: write
   security-events: write
-=======
->>>>>>> parent of 0660fbc (Prueba sin seguridad)
-
 env:
   # Environment variables for the workflow
   AZURE_WEBAPP_NAME: luixprojects-calculator-backend-uat
@@ -97,9 +94,6 @@ jobs:
       run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
       # Publish the .NET project to the specified output path without building
       ##Prueba JFROG
-<<<<<<< HEAD
-    
-=======
     # Nuevo: Configurar JFrog CLI
     - name: Setup JFrog CLI
       uses: jfrog/setup-jfrog-cli@v2
@@ -122,7 +116,6 @@ jobs:
     - name: Remove JFrog configuration
       run: |
         jfrog config delete my-server --quiet
->>>>>>> parent of 0660fbc (Prueba sin seguridad)
       ##END Prueba JFROG
 
     - name: Publish Artifacts
