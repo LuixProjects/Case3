@@ -88,7 +88,32 @@ jobs:
     - name: Publish
       run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
       # Publish the .NET project to the specified output path without building
+      ##Prueba JFROG
+    # Nuevo: Configurar JFrog CLI
+    - name: Setup JFrog CLI
+      uses: jfrog/setup-jfrog-cli@v2
+      with:
+        version: 'latest'
 
+    - name: Configure JFrog CLI
+      run: |
+        jfrog config add my-server \
+          --url=${{ secrets.JFROG_URL }} \
+          --apikey=${{ secrets.JFROG_API_KEY }} \
+          --interactive=false
+
+    # Nuevo: Subir artefactos a JFrog
+    - name: Upload artifacts to JFrog
+      run: |
+        jfrog rt upload \
+          "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/*" \
+          "my-repo-name/calculator-backend-uat/"
+
+    # Nuevo: Limpiar configuración de JFrog CLI
+    - name: Remove JFrog configuration
+      run: |
+        jfrog config delete my-server --quiet
+      ##END Prueba JFROG
     - name: Publish Artifacts
       uses: actions/upload-artifact@v4
       with:
