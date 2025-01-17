@@ -34,6 +34,11 @@ jobs:
       run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
       # Restore the dependencies for the .NET project
 
+
+    - name: Build
+      run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
+      # Build the .NET project in Release configuration without restoring dependencies
+
       ##Prueba GJL
     - name: Cache SonarQube Cloud packages
       uses: actions/cache@v4
@@ -75,9 +80,6 @@ jobs:
         ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
       #ENd pruebaGJL
-    - name: Build
-      run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
-      # Build the .NET project in Release configuration without restoring dependencies
 
     - name: Publish
       run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
