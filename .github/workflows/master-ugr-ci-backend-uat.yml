@@ -6,6 +6,14 @@ on:
   pull_request:
     branches:
     - dev
+<<<<<<< HEAD
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+  security-events: write
+=======
+>>>>>>> parent of 0660fbc (Prueba sin seguridad)
 
 env:
   # Environment variables for the workflow
@@ -89,6 +97,9 @@ jobs:
       run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
       # Publish the .NET project to the specified output path without building
       ##Prueba JFROG
+<<<<<<< HEAD
+    
+=======
     # Nuevo: Configurar JFrog CLI
     - name: Setup JFrog CLI
       uses: jfrog/setup-jfrog-cli@v2
@@ -111,7 +122,9 @@ jobs:
     - name: Remove JFrog configuration
       run: |
         jfrog config delete my-server --quiet
+>>>>>>> parent of 0660fbc (Prueba sin seguridad)
       ##END Prueba JFROG
+
     - name: Publish Artifacts
       uses: actions/upload-artifact@v4
       with:
@@ -137,6 +150,40 @@ jobs:
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
         publish-profile: ${{ secrets.MASTER_UGR_CI_BACKEND_UAT_SPN }}
       # Deploy the application to the specified Azure Web App
+
+  scan-pull-request:
+    runs-on: ubuntu-latest
+    # A pull request needs to be approved before Frogbot scans it. Any GitHub user who is associated with the
+    # "frogbot" GitHub environment can approve the pull request to be scanned.
+    environment: frogbot
+    steps:
+      - uses: jfrog/frogbot@v2
+        env:
+          # [Mandatory]
+          # JFrog platform URL
+          JF_URL: ${{ secrets.JF_URL }}
+
+          # [Mandatory if JF_USER and JF_PASSWORD are not provided]
+          # JFrog access token with 'read' permissions on Xray service
+          JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+
+          # [Mandatory if JF_ACCESS_TOKEN is not provided]
+          # JFrog username with 'read' permissions for Xray. Must be provided with JF_PASSWORD
+          # JF_USER: ${{ secrets.JF_USER }}
+
+          # [Mandatory if JF_ACCESS_TOKEN is not provided]
+          # JFrog password. Must be provided with JF_USER
+          # JF_PASSWORD: ${{ secrets.JF_PASSWORD }}
+
+          # [Mandatory]
+          # The GitHub token is automatically generated for the job
+          JF_GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+        # [Mandatory if using OIDC authentication protocol instead of JF_ACCESS_TOKEN]
+        # Insert to oidc-provider-name the 'Provider Name' defined in the OIDC integration configured in the JPD
+        # with:
+        #   oidc-provider-name: ""
+          
 
   test:
     runs-on: ubuntu-latest
