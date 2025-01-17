@@ -52,7 +52,7 @@ jobs:
       if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
       run: |
         mkdir -p ./.sonar/scanner
-        dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+        dotnet tool update dotnet-sonarscanner --tool-path ./.sonar/scanner
     - name: Configurar entorno para PowerShell
       run: |
         # Importar la clave pública del repositorio de Microsoft
