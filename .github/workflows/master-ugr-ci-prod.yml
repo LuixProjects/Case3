@@ -3,9 +3,11 @@ name: Build and deploy .NET Core application to Web App into production
 on:
   # Trigger the workflow manually or on push to the 'master' branch
   workflow_dispatch:
-  push:
+  pull_request:
     branches:
+    - dev
     - main
+    - lib
 
 env:
     # Front-end Domain    
