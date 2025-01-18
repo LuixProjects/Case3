@@ -1,0 +1,82 @@
+on:
+  # Trigger analysis when pushing to your main branches, and when creating a pull request.
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+      - dev
+      - lib
+      - backend-end
+      - front-end
+  pull_request:
+      types: [opened, synchronize, reopened]
+
+name: SonarQube análisis
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+  security-events: write
+env:
+  # Environment variables for the workflow
+  DOTNET_CORE_VERSION: 8.0.x
+  WORKING_DIRECTORY: master-ugr.calculator.back-end/calculator.backend
+jobs:
+  sonarqube:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    # Configuración de SonarQube Cloud
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
+      # Setup the .NET SDK version specified in the environment variables
+
+    - name: Restore
+      run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
+      # Restore the dependencies for the .NET project
+
+    - name: Cache SonarQube Cloud packages
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.WORKING_DIRECTORY }}/sonar/cache
+        key: ${{ runner.os }}-sonar
+        restore-keys: ${{ runner.os }}-sonar
+
+    - name: Cache SonarQube Cloud scanner
+      id: cache-sonar-scanner
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.WORKING_DIRECTORY }}/.sonar/scanner
+        key: ${{ runner.os }}-sonar-scanner
+        restore-keys: ${{ runner.os }}-sonar-scanner
+
+    - name: Install SonarQube Cloud scanner
+      run: |
+        mkdir -p ${{ env.WORKING_DIRECTORY }}/.sonar/scanner
+        dotnet tool update dotnet-sonarscanner --tool-path ${{ env.WORKING_DIRECTORY }}/.sonar/scanner
+
+    - name: Configurar entorno para PowerShell
+      run: |
+        # Importar la clave pública del repositorio de Microsoft
+        wget -q https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+        sudo dpkg -i packages-microsoft-prod.deb
+        rm packages-microsoft-prod.deb
+
+        # Actualizar los paquetes e instalar PowerShell
+        sudo apt-get update
+        sudo apt-get install -y powershell
+
+    - name: Verificar instalación de PowerShell
+      run: pwsh --version
+
+    - name: Build and analyze
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      shell: pwsh
+      run: |
+        ./${{ env.WORKING_DIRECTORY }}/.sonar/scanner/dotnet-sonarscanner begin /k:"luixprojects_calculator" /o:"luixprojects" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+        dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
+        ./${{ env.WORKING_DIRECTORY }}/.sonar/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
