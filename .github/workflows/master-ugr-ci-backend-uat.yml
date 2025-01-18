@@ -1,7 +1,7 @@
 name: Build and deploy .NET Core application to Web App master-ugr-ci-backend-uat
 
 on:
-  # Trigger the workflow manually or on pull requests to the 'uat' branchp
+  # Trigger the workflow manually or on pull requestsdfdfdf to the 'uat' branchp
   workflow_dispatch:
   pull_request:
     branches:
