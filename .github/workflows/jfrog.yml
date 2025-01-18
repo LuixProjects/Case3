@@ -1,9 +1,9 @@
 name: Scan Pull Request with Frogbot
 
 on:
+  workflow_dispatch:
   pull_request:
     types: [opened, synchronize, reopened]
-  workflow_dispatch: # Desencadenador manual para pruebas
 
 jobs:
   scan-pull-request:
