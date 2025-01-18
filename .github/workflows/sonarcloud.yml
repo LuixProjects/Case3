@@ -10,7 +10,16 @@ on:
   pull_request:
       types: [opened, synchronize, reopened]
 
-name: Main Workflow
+name: SonarQube análisis
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+  security-events: write
+env:
+  # Environment variables for the workflow
+  DOTNET_CORE_VERSION: 8.0.x
+  WORKING_DIRECTORY: master-ugr.calculator.back-end/calculator.backend
 jobs:
   sonarqube:
     runs-on: ubuntu-latest
