@@ -5,8 +5,9 @@ on:
     branches:
       - main
       - master
-      - develop
-      - 'releases/**'
+      - dev
+      - lib
+      - Prueba
   pull_request:
       types: [opened, synchronize, reopened]
 
