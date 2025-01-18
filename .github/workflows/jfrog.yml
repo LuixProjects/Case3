@@ -1,0 +1,29 @@
+name: Scan Pull Request with Frogbot
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch: # Desencadenador manual para pruebas
+
+jobs:
+  scan-pull-request:
+    runs-on: ubuntu-latest
+    environment: frogbot
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Set WORKING_DIRECTORY
+        run: echo "WORKING_DIRECTORY=${{ github.workspace }}" >> $GITHUB_ENV
+
+      - name: List directory structure
+        run: ls -R "${{ env.WORKING_DIRECTORY }}"
+
+      - name: Scan pull request with Frogbot
+        uses: jfrog/frogbot@v2
+        env:
+          JF_URL: ${{ secrets.JF_URL }}
+          JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JF_WORKING_DIR: "${{ env.WORKING_DIRECTORY }}"
