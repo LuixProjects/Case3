@@ -7,7 +7,8 @@ on:
       - master
       - dev
       - lib
-      - Prueba
+      - backend-end
+      - front-end
   pull_request:
       types: [opened, synchronize, reopened]
 
@@ -76,6 +77,6 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       shell: pwsh
       run: |
-        ./${{ env.WORKING_DIRECTORY }}/.sonar/scanner/dotnet-sonarscanner begin /k:"luixprojects_backend-calculator-uat" /o:"luixprojects" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-        dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
-        ./${{ env.WORKING_DIRECTORY }}/.sonar/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"luixprojects_sonarcloud-calculator" /o:"luixprojects" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+          dotnet build
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
