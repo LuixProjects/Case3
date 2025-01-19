@@ -10,14 +10,7 @@ on:
       - lib
       - backend-end
       - front-end
-  push:
-    branches:
-      - main
-      - master
-      - dev
-      - lib
-      - backend-end
-      - front-end
+
 
 env:
   WORKING_DIRECTORY: master-ugr.calculator.back-end/calculator.backend
