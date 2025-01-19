@@ -64,6 +64,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Restore
+        run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
+          # Restore the dependencies for the .NET project
+
       - name: Scan pull request with Frogbot
         uses: jfrog/frogbot@v2
         env:
