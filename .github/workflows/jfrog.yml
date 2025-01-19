@@ -2,7 +2,7 @@ name: Scan Pull Request with Frogbot
 
 on:
   workflow_dispatch:
-  push:
+  pull_request:
     branches:
       - main
       - master
@@ -10,6 +10,7 @@ on:
       - lib
       - backend-end
       - front-end
+
 
 env:
   WORKING_DIRECTORY: master-ugr.calculator.back-end/calculator.backend
