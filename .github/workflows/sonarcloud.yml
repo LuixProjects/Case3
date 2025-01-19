@@ -9,8 +9,7 @@ on:
       - lib
       - backend-end
       - front-end
-  pull_request:
-      types: [opened, synchronize, reopened]
+
 
 name: SonarQube análisis
 permissions:
