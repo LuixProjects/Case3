@@ -20,7 +20,7 @@ namespace calculator.backend
                 {
                     Version = "v1",
                     Title = "Calculator API",
-                    Description = "An API for performing basic calculator operations"
+                    Description = "An API for performing basic calculator operationss"
                 });
             });
 
