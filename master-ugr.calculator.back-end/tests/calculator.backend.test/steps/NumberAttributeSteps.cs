@@ -16,6 +16,13 @@ namespace calculator.lib.test.steps
     {
         private readonly ScenarioContext _scenarioContext;
 
+        //Añado para introducir el número.
+        [Given(@"the number (.*)")]
+        public void GivenANumber(int number)
+        {
+            _scenarioContext.Add("number", number);
+        }
+
         public NumberAttributeSteps(ScenarioContext scenarioContext)
         {
             _scenarioContext = scenarioContext;
@@ -53,5 +60,18 @@ namespace calculator.lib.test.steps
             var isOdd = _scenarioContext.Get<bool>("isOdd");
             Assert.Equal(isOdd, isIt);
         }
+
+        [When(@"I calculate the square root")]
+        public void calculateSquareRoot()
+        {
+            using (var client = new HttpClient())
+            {
+                var number = _scenarioContext.Get<int>("number");
+                var sr = Math.Sqrt(number);
+                _scenarioContext.Add("result", sr);
+            }
+        }
+
+
     }
 }

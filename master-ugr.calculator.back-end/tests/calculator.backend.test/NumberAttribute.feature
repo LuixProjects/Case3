@@ -14,3 +14,13 @@ Examples:
 	| 8      | false | false|
 	| 9      | false | true |
 	| 10     | false | false|
+
+Scenario Outline: Calculate the square root of a number
+  Given the number <number>
+  When I calculate the square root
+  Then the result shall be <result>
+
+Examples:
+  | number | result |
+  | 36     | 6      |
+  | -1     | NaN    |
