@@ -16,7 +16,7 @@ namespace CalculatorAPI.Controllers
 
         [HttpGet("subtract")]
         public ActionResult<double> Subtract([FromQuery] double a, [FromQuery] double b)
-        {
+        {//
             var final_result = Calculator.Subtract((int)a, (int)b);
             return Ok(new { result = final_result });
         }
